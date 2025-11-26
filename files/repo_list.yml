@@ -1,0 +1,16 @@
+---
+system_packages_repo_list:
+    # INFO https://www.tuxedocomputers.com/en/Add-TUXEDO-software-package-sources.tuxedo
+  - name: tuxedo
+    distro:
+      - fedora
+    description: "Tuxedo drivers repository Fedora $releasever - $basearch"
+    baseurl: "https://rpm.tuxedocomputers.com/fedora/$releasever/$basearch/base"
+    enabled: true
+    gpgcheck: true
+    gpgkey: "https://rpm.tuxedocomputers.com/fedora/$releasever/0x54840598.pub.asc"
+    priority: 50
+    timeout: 3
+    skip_if_unavailable: false
+
+...

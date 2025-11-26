@@ -1,3 +1,50 @@
 ---
 
+- name: Install debian specific package_facts dependency
+  become: true
+  when: ansible_distribution == "Debian"
+  ansible.builtin.package:
+    name: python-apt-common
+    state: present
+
+# INFO This task may be obsolete for your use-case
+- name: Gather package facts
+  ansible.builtin.package_facts:
+
+- name: Load repository list from YAML file
+  ansible.builtin.include_vars:
+    file: "{{ system_packages_repo_config }}"
+
+- name: Validate rhel setup
+  when: ansible_os_family == "RedHat" and system_packages_list[ansible_distribution] is defined
+  block:
+    - name: Get enabled repos
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          dnf repolist --enabled | awk 'NR > 1 {print $1}'
+        executable: /bin/bash
+      changed_when: false
+      register: enabled_repos_result
+
+    - name: Test enabled repos
+      loop: "{{ system_packages_repo_list }}"
+      loop_control:
+        loop_var: repo
+        label: "{{ repo.name }}"
+      when: (ansible_distribution | lower in repo.distro) | default(true)
+      ansible.builtin.assert:
+        that:
+          - repo.name in enabled_repos_result.stdout_lines
+        fail_msg: "Failed to find {{ repo.name }}"
+        quiet: true
+
+    - name: Verify installed packages
+      loop: "{{ system_packages_list[ansible_distribution] }}"
+      loop_control:
+        loop_var: package
+      ansible.builtin.assert:
+        that:
+          - package in ansible_facts.packages
+
 ...

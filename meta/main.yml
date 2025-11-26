@@ -1,11 +1,10 @@
 ---
 
 galaxy_info:
-  role_name: system-packages
-  namespace: philnewm
+  role_name: system_packages
   author: author_name
   description: ansible-role-template description
-  license: some_license
+  license: MIT
   min_ansible_version: "2.1"
   platforms:
     - name: EL
