@@ -1,0 +1,21 @@
+---
+
+system_packages_list:
+  rhel: &rhel_packages
+    - htop
+    - btop
+  centos:
+    - *rhel_packages
+  almalinux:
+    - *rhel_packages
+  rocky:
+    - *rhel_packages
+  fedora:
+    - *rhel_packages
+    - tuxedo-drivers
+    - tuxedo-yt6801
+    - tuxedo-bt-off-suspend
+    - tuxedo-control-center
+
+
+...
