@@ -15,8 +15,12 @@
   ansible.builtin.include_vars:
     file: "{{ system_packages_repo_config }}"
 
+- name: Load packages list from YAML file
+  ansible.builtin.include_vars:
+    file: "{{ system_packages_config }}"
+
 - name: Validate rhel setup
-  when: ansible_os_family == "RedHat" and system_packages_list[ansible_distribution] is defined
+  when: ansible_os_family == "RedHat" and system_packages_list[ansible_distribution | lower] is defined
   block:
     - name: Get enabled repos
       ansible.builtin.shell:
@@ -40,11 +44,13 @@
         quiet: true
 
     - name: Verify installed packages
-      loop: "{{ system_packages_list[ansible_distribution] }}"
+      loop: "{{ system_packages_list[ansible_distribution | lower] | flatten(1) }}"
       loop_control:
         loop_var: package
       ansible.builtin.assert:
         that:
           - package in ansible_facts.packages
+        fail_msg: "Failed to find package {{ package }}"
+        quiet: true
 
 ...

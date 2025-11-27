@@ -15,6 +15,10 @@
   ansible.builtin.include_vars:
     file: "{{ system_packages_repo_config }}"
 
+- name: Load packages list from YAML file
+  ansible.builtin.include_vars:
+    file: "{{ system_packages_config }}"
+
 - name: Include repo files logic
   ansible.builtin.include_tasks:
     file: "{{ ansible_os_family | lower }}_repos.yml"

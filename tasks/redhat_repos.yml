@@ -1,5 +1,13 @@
 ---
 
+# INFO Fedora43 was missing these essential packages by default
+- name: Ensure python rpm/dnf is installed
+  become: true
+  ansible.builtin.command:
+    cmd: dnf install -y python3-rpm python3-dnf
+  register: python_rpm_result
+  changed_when: '"Nothing to do." not in python_rpm_result.stdout_lines'
+
 - name: Set up repos
   become: true
   loop: "{{ system_packages_repo_list }}"
@@ -40,8 +48,8 @@
 
 - name: Install packages
   become: true
-  when: system_packages_list[ansible_distribution] is defined
+  when: system_packages_list[ansible_distribution | lower] is defined
   ansible.builtin.dnf:
-    name: "{{ system_packages_list[ansible_distribution] }}"
+    name: "{{ system_packages_list[ansible_distribution | lower] | flatten(1) }}"
 
 ...
