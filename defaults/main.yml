@@ -4,11 +4,6 @@ state: present
 system_packages_repos_path_rhel: "/etc/yum.repos.d"
 system_packages_repos_path_debian: "/etc/apt/sources.list"
 system_packages_repo_config: "files/repo_list.yml"
-system_packages_list:
-  fedora:
-    - tuxedo-drivers
-    - tuxedo-yt6801
-    - tuxedo-bt-off-suspend
-    - tuxedo-control-center
+system_packages_config: "files/packages_list.yml"
 
 ...
