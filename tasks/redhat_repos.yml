@@ -45,11 +45,16 @@
       become: true
       ansible.builtin.dnf:
         update_cache: true
+        use_backend: dnf4
+
+- name: Gather package facts
+  ansible.builtin.package_facts:
 
 - name: Install packages
   become: true
   when: system_packages_list[ansible_distribution | lower] is defined
   ansible.builtin.dnf:
     name: "{{ system_packages_list[ansible_distribution | lower] | flatten(1) }}"
+    use_backend: dnf4
 
 ...
