@@ -1,15 +1,5 @@
 ---
 
-- name: Install debian specific package_facts dependency
-  become: true
-  when: ansible_distribution == "Debian"
-  ansible.builtin.package:
-    name: python-apt-common
-    state: present
-
-- name: Gather package facts
-  ansible.builtin.package_facts:
-
 - name: Load repository list from YAML file
   ansible.builtin.include_vars:
     file: "{{ system_packages_repo_config }}"

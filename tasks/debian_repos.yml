@@ -1,5 +1,15 @@
 ---
 
+- name: Install debian specific package_facts dependency
+  become: true
+  when: ansible_distribution == "Debian"
+  ansible.builtin.package:
+    name: python-apt-common
+    state: present
+
+- name: Gather package facts
+  ansible.builtin.package_facts:
+
 - name: Nothing
   ansible.builtin.debug:
     msg: "Empty placeholder"
