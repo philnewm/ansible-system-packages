@@ -4,7 +4,7 @@
 - name: Ensure python rpm/dnf is installed
   become: true
   ansible.builtin.command:
-    cmd: dnf install -y python3-rpm python3-dnf
+    cmd: dnf install -y python3-rpm python3-dnf python3-libdnf5
   register: python_rpm_result
   changed_when: '"Nothing to do." not in python_rpm_result.stdout_lines'
 
@@ -45,7 +45,6 @@
       become: true
       ansible.builtin.dnf:
         update_cache: true
-        use_backend: dnf4
 
 - name: Gather package facts
   ansible.builtin.package_facts:
@@ -55,6 +54,5 @@
   when: system_packages_list[ansible_distribution | lower] is defined
   ansible.builtin.dnf:
     name: "{{ system_packages_list[ansible_distribution | lower] | flatten(1) }}"
-    use_backend: dnf4
 
 ...
