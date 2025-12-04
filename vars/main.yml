@@ -1,0 +1,9 @@
+---
+
+system_packages_rhel_derivatives:
+  - redhat
+  - centos
+  - almalinux
+  - rocky
+
+...

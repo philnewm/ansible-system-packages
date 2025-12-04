@@ -4,9 +4,19 @@
 - name: Ensure python rpm/dnf is installed
   become: true
   ansible.builtin.command:
-    cmd: dnf install -y python3-rpm python3-dnf python3-libdnf5
+    cmd: >
+      dnf install -y
+      python3-rpm
+      python3-dnf
+      {% if ansible_facts.distribution | lower == 'fedora' %}python3-libdnf5{% endif %}
   register: python_rpm_result
   changed_when: '"Nothing to do." not in python_rpm_result.stdout_lines'
+
+- name: Install epel
+  when: ansible_distribution | lower in system_packages_rhel_derivatives
+  ansible.builtin.dnf:
+    name: "epel-release"
+    state: present
 
 - name: Set up repos
   become: true
