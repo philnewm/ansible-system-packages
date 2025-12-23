@@ -1,6 +1,6 @@
 ---
 
-name: Alma9-CI
+name: Alma9
 
 on:
   push:
@@ -22,7 +22,7 @@ permissions:
   contents: read
 
 jobs:
-  alma9-ci:
+  ci:
     uses: philnewm/ansible-role-repo-control/.github/workflows/molecule-ci-podman.yml@main
     with:
       scenario_name: almalinux9

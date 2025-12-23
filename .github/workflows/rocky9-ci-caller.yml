@@ -1,6 +1,6 @@
 ---
 
-name: Rocky9-CI
+name: Rocky9
 
 on:
   push:
@@ -22,7 +22,7 @@ permissions:
   contents: read
 
 jobs:
-  rocky9-ci:
+  ci:
     uses: philnewm/ansible-role-repo-control/.github/workflows/molecule-ci-podman.yml@main
     with:
       scenario_name: rocky9
