@@ -10,7 +10,7 @@
   loop_control:
     loop_var: repo
     label: "{{ repo.name }}"
-  when: (ansible_distribution | lower in repo.distro) | default(true)
+  when: (ansible_facts.distribution | lower in repo.distro) | default(true)
   ansible.builtin.yum_repository:
     name: "{{ repo.name }}"
     state: absent

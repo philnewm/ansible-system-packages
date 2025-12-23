@@ -2,7 +2,7 @@
 
 - name: Install debian specific package_facts dependency
   become: true
-  when: ansible_distribution == "Debian"
+  when: ansible_facts.distribution == "Debian"
   ansible.builtin.package:
     name: python-apt-common
     state: present
@@ -20,7 +20,7 @@
     file: "{{ system_packages_config }}"
 
 - name: Validate rhel setup
-  when: ansible_os_family == "RedHat" and system_packages_list[ansible_distribution | lower] is defined
+  when: ansible_facts.os_family == "RedHat" and system_packages_list[ansible_facts.distribution | lower] is defined
   block:
     - name: Get enabled repos
       ansible.builtin.shell:
@@ -36,7 +36,7 @@
       loop_control:
         loop_var: repo
         label: "{{ repo.name }}"
-      when: (ansible_distribution | lower in repo.distro) | default(true)
+      when: (ansible_facts.distribution | lower in repo.distro) | default(true)
       ansible.builtin.assert:
         that:
           - repo.name in enabled_repos_result.stdout_lines
@@ -44,7 +44,7 @@
         quiet: true
 
     - name: Verify installed packages
-      loop: "{{ system_packages_list[ansible_distribution | lower] | flatten(1) }}"
+      loop: "{{ system_packages_list[ansible_facts.distribution | lower] | flatten(1) }}"
       loop_control:
         loop_var: package
       ansible.builtin.assert:

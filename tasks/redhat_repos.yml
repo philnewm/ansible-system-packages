@@ -13,7 +13,8 @@
   changed_when: '"Nothing to do." not in python_rpm_result.stdout_lines'
 
 - name: Install epel
-  when: ansible_distribution | lower in system_packages_rhel_derivatives
+  when: ansible_facts.distribution | lower in system_packages_rhel_derivatives
+  become: true
   ansible.builtin.dnf:
     name: "epel-release"
     state: present
@@ -24,7 +25,7 @@
   loop_control:
     loop_var: repo
     label: "{{ repo.name }}"
-  when: (ansible_distribution | lower in repo.distro) | default(true)
+  when: (ansible_facts.distribution | lower in repo.distro) | default(true)
   ansible.builtin.yum_repository:
     name: "{{ repo.name }}"
     description: "{{ repo.description }}"
@@ -41,28 +42,19 @@
     state: present
   register: repo_setup_result
 
-- name: Handle dnf cache
-  when: repo_setup_result.changed
-  block:
-    - name: Clean dnf cache
-      become: true
-      ansible.builtin.command:
-        cmd: dnf clean all
-      register: dnf_clean_result
-      changed_when: dnf_clean_result.rc == 0
-
-    - name: Update dnf metadata cache
-      become: true
-      ansible.builtin.dnf:
-        update_cache: true
-
 - name: Gather package facts
   ansible.builtin.package_facts:
 
 - name: Install packages
   become: true
-  when: system_packages_list[ansible_distribution | lower] is defined
+  when: system_packages_list[ansible_facts.distribution | lower] is defined
   ansible.builtin.dnf:
-    name: "{{ system_packages_list[ansible_distribution | lower] | flatten(1) }}"
+    name: "{{ system_packages_list[ansible_facts.distribution | lower] | flatten(1) }}"
+    update_cache: true
+  register: package_install_result
+  # INFO tuxedo repos fails on first try
+  retries: 3
+  delay: 2
+  until: package_install_result is succeeded
 
 ...
