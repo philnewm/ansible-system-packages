@@ -1,9 +1,10 @@
 ---
 system_packages_repo_list:
-    # INFO https://www.tuxedocomputers.com/en/Add-TUXEDO-software-package-sources.tuxedo
+  # INFO https://www.tuxedocomputers.com/en/Add-TUXEDO-software-package-sources.tuxedo
+  # TODO make tuxedo optional
   - name: tuxedo
-    distro:
-      - fedora
+    distro: []
+      # - fedora
     description: "Tuxedo drivers repository Fedora $releasever - $basearch"
     baseurl: "https://rpm.tuxedocomputers.com/fedora/$releasever/$basearch/base"
     enabled: true
