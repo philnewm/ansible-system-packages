@@ -12,4 +12,13 @@
   ansible.builtin.include_tasks:
     file: "{{ ansible_os_family | lower }}_repos.yml"
 
+- name: Install custom packages (usually device specific)
+  become: true
+  loop: "{{ system_packages_custom_packages }}"
+  loop_control:
+    loop_var: custom_package
+  ansible.builtin.package:
+    name: "{{ custom_package }}"
+    state: present
+
 ...
