@@ -42,19 +42,4 @@
     state: present
   register: repo_setup_result
 
-- name: Gather package facts
-  ansible.builtin.package_facts:
-
-- name: Install packages
-  become: true
-  when: system_packages_list[ansible_facts.distribution | lower] is defined
-  ansible.builtin.dnf:
-    name: "{{ system_packages_list[ansible_facts.distribution | lower] | flatten(1) }}"
-    update_cache: true
-  register: package_install_result
-  # INFO tuxedo repos fails on first try
-  retries: 3
-  delay: 2
-  until: package_install_result is succeeded
-
 ...
