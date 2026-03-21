@@ -2,6 +2,9 @@
 
 system_packages_list:
   default_packages: &default_packages
+    - htop
+    - btop
+  rhel: *default_packages
   centos: *default_packages
   almalinux: *default_packages
   rocky: *default_packages

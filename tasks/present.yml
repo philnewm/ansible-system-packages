@@ -17,6 +17,7 @@
   when: system_packages_list[ansible_facts.distribution | lower] is defined
   ansible.builtin.package:
     name: "{{ system_packages_list[ansible_facts.distribution | lower] | flatten(1) }}"
+    state: present
     update_cache: true
   register: package_install_result
   # Note tuxedo repos fails on first try
