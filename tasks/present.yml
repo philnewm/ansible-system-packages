@@ -21,4 +21,9 @@
     name: "{{ custom_package }}"
     state: present
 
+- name: Update netplan config
+  when: system_packages_network_manager
+  ansible.builtin.include_tasks:
+    file: network_manager.yml
+
 ...
